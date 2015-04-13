@@ -6,14 +6,16 @@ if [ $# -ne 3 ]; then
 fi
 
 ## USER CONFIG
-# There is no user config
+# Time limit, in seconds
+TIMELIMIT=5
+
 ## END USER CONFIG
 
 HOST=$1
 DNS_NAME=$2
 DNS_IP=$3
 
-COMMAND="dig @$HOST +short A $DNS_NAME"
+COMMAND="dig @$HOST +time=$TIMELIMIT +tries=1 +short A $DNS_NAME"
 OUTPUT=$(eval $COMMAND)
 
 echo "ScoreEngine Module: dns_check"

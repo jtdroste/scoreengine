@@ -38,7 +38,7 @@ class Database(object):
         self.lock.acquire()
         
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM teams")
+        cursor.execute("SELECT * FROM teams WHERE active = 1")
         
         row = cursor.fetchone()
         
