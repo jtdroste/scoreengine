@@ -15,6 +15,7 @@ class Master(object):
         self.db = db
         self.config = config
         self.checksPaused = False
+        self.lock = thread.allocate_lock()
     
     def addScore(self, team, service, status, output):
         self.db.addScore(team, service, status, output)
@@ -34,7 +35,7 @@ class Master(object):
         checks = self.db.getTeamServices(team_id)
         
         for check in checks:
-            self.log("Master", "Creating check thread for Team ID %s" % (team_id))
+            self.log("Master", "Creating check thread for Team ID %s - %s" % (team_id, check['name']))
             self.createCheckThread(team_id, check['id'], check['name'], check['module'], check['args'])
     
     def createCheckThread(self, teamid, serviceid, name, module_name, args):
@@ -44,6 +45,22 @@ class Master(object):
         thread.start_new_thread(check.main, ())
     
     def log(self, who, text):
-        str = "[%s] %s: %s\n" % (time.strftime("%I:%M:%S"), who.upper(), text)
+        logtext = "%s: %s\n" % (time.strftime("%I:%M:%S"), text)
+        self.outputLog("[%s] %s" % (who.upper(), logtext))
+        
+        if self.config['logging'] == True:
+            logfile = self.config['log_directory'] % who.lower()+".log"
+            self.writeLog(logfile, logtext)
+    
+    def outputLog(self, str):
         sys.stdout.write(str)
         sys.stdout.flush()
+    
+    def writeLog(self, file, data):
+        self.lock.acquire()
+        
+        f = open(file, "a+")
+        f.write(data)
+        f.close()
+        
+        self.lock.release()

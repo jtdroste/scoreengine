@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+from scoring.database import Database
+from scoring.master import Master
+from util.config import getConfig
+from util.check import checkOnce
+import sys
+
+db = Database(getConfig("config.ini", "database"))
+master = Master(db, getConfig("config.ini", "main"))
+
+if len(sys.argv) == 1:
+    sys.exit("Usage: check [team-id] [check-id]")
+else:
+    team_id = int(sys.argv[1])
+    service_id = int(sys.argv[2])
+    
+    checkOnce(master, team_id, service_id)

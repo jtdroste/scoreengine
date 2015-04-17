@@ -3,3 +3,6 @@
 
 # Silly DS_Store
 .DS_Store
+
+# Config files
+config.ini

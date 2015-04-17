@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+from scoring.database import Database
+from scoring.master import Master
+from util.config import getConfig
+
+db = Database(getConfig("config.ini", "database"))
+master = Master(db, getConfig("config.ini", "main"))
+
+master.createTeamThreads()
+
+while 1:
+    pass

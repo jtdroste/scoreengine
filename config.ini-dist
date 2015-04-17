@@ -1,0 +1,15 @@
+[database]
+user: DB_USER
+password: DB_PASS
+host: DB_HOST
+database: DB_NAME
+raise_on_warnings: True
+buffered: True
+
+[main]
+scripts: /var/scoreengine/scripts/%s
+logging: True
+log_directory: /var/log/scoreengine/%s
+interval: 60
+ip_changing: False
+ip_allocated: 192.168.1.1
