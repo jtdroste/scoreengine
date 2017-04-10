@@ -20,7 +20,6 @@ at specific intervals
 
 printLock = allocate_lock()
 
-
 class Master(object):
 	def __init__(self, round=0, only_queue=False):
 		self.started = datetime.utcnow()
